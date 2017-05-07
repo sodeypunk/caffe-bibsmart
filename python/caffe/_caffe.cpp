@@ -191,6 +191,10 @@ void Net_SetInputArrays(Net<Dtype>* net, bp::object data_obj,
   md_layer->Reset(static_cast<Dtype*>(PyArray_DATA(data_arr)),
       static_cast<Dtype*>(PyArray_DATA(labels_arr)),
       PyArray_DIMS(data_arr)[0]);
+
+  // Decrement the array references so that there aren't memory leaks
+  Py_DECREF(data_arr);
+  Py_DECREF(labels_arr);
 }
 
 Solver<Dtype>* GetSolverFromFile(const string& filename) {
